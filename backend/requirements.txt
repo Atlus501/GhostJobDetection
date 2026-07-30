@@ -1,0 +1,8 @@
+zai-sdk
+pydantic
+pinecone[asyncio]
+fastapi
+uvicorn
+gunicorn
+mlflow
+pathlib
