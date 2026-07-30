@@ -1,7 +1,9 @@
 zai-sdk
+multiprocessing
 pydantic
 pinecone[asyncio]
 fastapi
+uvicorn-worker
 uvicorn
 gunicorn
 mlflow

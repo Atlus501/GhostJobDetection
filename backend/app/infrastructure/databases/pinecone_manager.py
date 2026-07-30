@@ -2,8 +2,8 @@ import logging
 
 from pinecone import AsyncPinecone, ServerlessSpec
 
-from config.settings import settings
-from schemas.llmresponse import LLMResponse
+from app.config.settings import settings
+from app.schemas.llmresponse import LLMResponse
 
 """
 Class for managing the pinecone database
@@ -12,7 +12,7 @@ class PineconeManager:
     """
     Constructor for the pinecone manager
     """
-    def __init__(self, api_key: str, index_name: str):
+    def __init__(self):
         self.pc = AsyncPinecone(api_key=settings.PINECONE_API)
         self.index_name = settings.PINECONE_INDEX_NAME
         self.index_host: str | None = None
