@@ -2,6 +2,7 @@ from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 
+import asyncio
 import pandas as pd
 import joblib
 import mlflow
@@ -53,9 +54,20 @@ async def load_data(heuristic=True, file="heuristic.csv"):
         except FileNotFoundError as e: 
             raise FileNotFoundError(str(e))
 
+    print("Fetching data from pymonogo")
+
     db = GhostJobDB()
     entries = await db.load()
-    return entires
+
+    if not entries:
+        raise ValueError("No records found in MongoDB collection!")
+
+    df = pd.DataFrame(entries)
+
+    if "_id" in df.columns:
+        df.drop(columns=["_id"])
+
+    return df
 
 """
 evaluates a model based on its accuracy, precision, and recall
@@ -112,4 +124,4 @@ async def train_model(version="1.0.0", target="ghost_job", dataset_type="heurist
 if __name__ == "__main__":
     version="1.0.0"
     logging.basicConfig(level=logging.INFO, filename=f"../logs/boosted_tree/{version}.log")
-    train_model(version=version)
+    asyncio.run(train_model(version=version))
