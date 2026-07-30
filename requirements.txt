@@ -8,3 +8,6 @@ uvicorn
 gunicorn
 mlflow
 pathlib
+pandas
+sklearn
+pymongo
