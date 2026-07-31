@@ -31,6 +31,14 @@ class GhostJobDB:
         return db[self.table]
 
     """
+    Function for setting up indices 
+    """
+    async def setup_index(self, indicies : list[str]):
+        indicies = [(index, 1) for index in indicies]
+        collection = self.get_collection()
+        await collection.create_index(indicies, unique=True)
+
+    """
     Asynchronous function to save data entries into the database 
     """
     async def save(self, id : int | None, entry : data_entry):

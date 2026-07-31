@@ -65,6 +65,8 @@ async def load_data(heuristic=True, file="heuristic.csv"):
     print("Fetching data from pymonogo")
 
     db = GhostJobDB()
+    await db.setup_index(["company", "position"])
+
     entries = await db.load()
 
     if not entries:

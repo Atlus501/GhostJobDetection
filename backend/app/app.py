@@ -27,7 +27,7 @@ async def lifespan(app: FastAPI):
 
     #sets up mongodbs
     ghost_job_db = MongoDB("GhostJobInfo")
-    await ghost_job_db.setup_index(["Company", "Position"])
+    await ghost_job_db.setup_index(["company", "position"])
     llmresponse_db = PineconeDB("ghostjobs")
     await llmresponse_db.initialize()
     boosted_tree = BoostedTree()

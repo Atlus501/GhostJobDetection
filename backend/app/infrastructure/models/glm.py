@@ -41,7 +41,7 @@ class GLM:
                 "type": "enabled",  # Optional: "disabled" or "enabled", default is "enabled"
             },
             max_tokens=4096,
-            temperature=0.02,
+            temperature=0.0,
         )
 
         return JobEvaluationResult.model_validate_json(response.choices[0].message.content)
