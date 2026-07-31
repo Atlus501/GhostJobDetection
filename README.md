@@ -3,4 +3,5 @@ This is a project where I attempt to use machine learning to solve a problem a l
 
 ### Architecture
 Below is the rough architecture that I planned for this application.
+
 <img width="515" height="504" alt="image" src="https://github.com/user-attachments/assets/a57e4f6d-a3b4-4a18-ab7b-874ab723f852" />
