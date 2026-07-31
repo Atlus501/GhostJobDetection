@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, SettingsDict
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
 current_dir = Path(__file__).resolve().parent

@@ -1,8 +1,7 @@
 zai-sdk
-multiprocessing
 pydantic
-pinecone[asyncio]
-fastapi
+pinecone
+fastapi[standard]
 uvicorn-worker
 uvicorn
 gunicorn
@@ -10,6 +9,6 @@ mlflow
 pathlib
 pandas
 joblib
-sklearn
+scikit-learn
 pymongo
 starlette

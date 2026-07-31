@@ -39,19 +39,15 @@ async def test(
     if not found:
         # Convert TestRequest -> Job schema (extra fields dropped automatically)
         job = Job(**test_request.model_dump())
-        record_text = await text_evaluator.rate_job(job)
-
-        record_text = record_text.strip()
-        # Fixed typo: "Final Rating: " instead of "Final Ranting: "
-        split = record_text.rsplit("Final Rating: ", 1)
+        response = await text_evaluator.rate_job(job)
 
         # Parse score safely
-        score = float(split[-1].strip()) if len(split) > 1 else 0.0
+        score = response.final_rating
 
         # Construct LLM response payload
         llm_payload = test_request.model_dump()
         llm_payload["ghost_job_risk"] = score
-        llm_payload["response"] = record_text
+        llm_payload["response"] = response.reasoning
 
         llm_response_obj = LLMResponse(**llm_payload)
         await llm_record_keeper.upsert_record(llm_response_obj)

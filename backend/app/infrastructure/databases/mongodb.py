@@ -24,9 +24,10 @@ class MongoDB:
     """
     Function for setting up indices 
     """
-    async setup_index(self, indicies : list[str]):
-        indicies = [(index, 1) for index in indices]
-        await self.table.create_index(indicies, unique=True)
+    async def setup_index(self, indicies : list[str]):
+        indicies = [(index, 1) for index in indicies]
+        collection = self.get_collection()
+        await collection.create_index(indicies, unique=True)
 
     """
     Function for getting the table that one is using

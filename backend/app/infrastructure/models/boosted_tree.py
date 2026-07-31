@@ -4,7 +4,7 @@ from pathlib import Path
 class BoostedTree:
     def __init__ (self):
         current_dir = Path(__file__).resolve().parent
-        path = current_dir / "tree.joblib"
+        path = current_dir / "boosted_tree.joblib"
 
         # Load the saved model back into memory
         self.tree = joblib.load(path)

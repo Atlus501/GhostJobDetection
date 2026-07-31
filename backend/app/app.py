@@ -1,6 +1,7 @@
-from fastpi import FastAPI
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import logging
+import uvicorn
 
 from config.settings import settings
 
@@ -22,7 +23,7 @@ from services.text_evaluator import TextEvaluator
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logging.basicConfig(level=logging.INFO, file=settings.LOGGER_FILE)
+    logging.basicConfig(level=logging.INFO, filename=settings.LOGGER_FILE)
 
     #sets up mongodbs
     ghost_job_db = MongoDB("GhostJobInfo")
@@ -50,6 +51,9 @@ app = FastAPI(
     version="1.0.0",
     description="This is the async backend for detecting potenial ghost jobs",
     lifespan=lifespan,
+    docs_url=None if settings.ENVIRONMENT == "production" else "/docs",
+    redoc_url=None if settings.ENVIRONMENT == "production" else "/redoc",
+    openapi_url=None if settings.ENVIRONMENT == "production" else "/openapi.json",
 )
 
 #adds the middleware
@@ -60,3 +64,7 @@ setup_error_handlers(app)
 
 app.include_router(report_router, prefix="/report")
 app.include_router(test_router, prefix="/test")
+
+if __name__ == "__main__":
+    logging.info("uvicorn server has begun listening")
+    uvicorn.run("app:app", host=settings.HOST, port=settings.PORT, reload=True)

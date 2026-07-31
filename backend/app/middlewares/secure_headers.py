@@ -5,7 +5,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 """
 Middlware class for adding secure response headers
 """
-class SecureResponseMiddlware(BaseHTTPMiddleware):
+class SecureResponseMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         # Allow the request to travel down to the router endpoint
         response = await call_next(request)

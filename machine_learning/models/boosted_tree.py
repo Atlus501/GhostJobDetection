@@ -7,17 +7,23 @@ import pandas as pd
 import joblib
 import mlflow
 import logging
+from pathlib import Path
 
-from artifacts.boosted_tree.boosted_tree_config import default_tree
-from artifacts.mlflow import mlflow_config
+from artifacts.boosted_tree_config import default_tree
+from config.mlflow import mlflow_config
 from data_gen.ghost_job import GhostJobDB
+
+
+def get_curr_dir():
+    path = Path(__file__).resolve().parent
+    return path
 
 """
 Sets up the mlflow
 """
 def setup_mlflow(version, user_id=1, session_id=1):
     # Specify the tracking URI for the MLflow server.
-    mlflow.set_tracking_uri(mlflow_config.bind)
+    mlflow.set_tracking_uri("sqlite:///mlflow.db")
 
     # Specify the experiment you just created for your LLM application or AI agent.
     mlflow.set_experiment(mlflow_config.application)
@@ -35,7 +41,8 @@ Otherwise, return a default graident boosting classifier tree
 """
 def load_model(version):
     try:
-        tree = joblib.load(f"../artifacts/boosted_tree/{version}.joblib")
+        path = get_curr_dir().parent / "artifacts" / f"boosted_tree{version}.joblib"
+        tree = joblib.load(path)
         print("loading existing joblib file")
         return tree
     except FileNotFoundError as e:
@@ -48,7 +55,8 @@ Loads data from a file
 async def load_data(heuristic=True, file="heuristic.csv"):
     if heuristic:
         try:
-            df = pd.read_csv(f"../data/{file}")
+            path = get_curr_dir().parent / "data" / file
+            df = pd.read_csv(path)
             print("using heuristcal data")
             return df
         except FileNotFoundError as e: 
@@ -85,7 +93,8 @@ def evaluate_model(tree, X_test, y_test):
 Saves a model into the joblib file
 """
 def save_model(tree, version):
-    joblib.dump(tree, f"../artifacts/boosted_tree/{version}.joblib")
+    path = get_curr_dir().parent / "artifacts" / f"boosted_tree{version}.joblib"
+    joblib.dump(tree, path)
 
 
 """
@@ -94,7 +103,7 @@ Function that loads the model and then trains it
 async def train_model(version="1.0.0", target="ghost_job", dataset_type="heuristic"):
     tree = load_model(version)
 
-    df = await load_data(heuristic=(datasetype == "heuristic"))
+    df = await load_data(heuristic=(dataset_type == "heuristic"))
 
     X = df.drop(target, axis=1)
     y = df[target]
@@ -122,6 +131,8 @@ async def train_model(version="1.0.0", target="ghost_job", dataset_type="heurist
     save_model(tree, version)
 
 if __name__ == "__main__":
-    version="1.0.0"
-    logging.basicConfig(level=logging.INFO, filename=f"../logs/boosted_tree/{version}.log")
+    version="v1"
+    log_path = Path(__file__).resolve().parent.parent / "logs" / f"boosted_tree{version}.log"
+    logging.basicConfig(level=logging.INFO, filename=log_path)
+
     asyncio.run(train_model(version=version))
