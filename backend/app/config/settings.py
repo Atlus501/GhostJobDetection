@@ -10,6 +10,8 @@ class Settings(BaseSettings):
   PINECONE_INDEX_NAME : str
   PINECONE_NAMESPACE : str
   LOGGER_FILE : str
+  MONGODB_USERNAME : str
+  MONGODB_PASSWORD : str
 
   model_config = SettingsConfigDict(env_file=env_path, env_file_encoding="utf-8")
 

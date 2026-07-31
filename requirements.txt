@@ -9,5 +9,7 @@ gunicorn
 mlflow
 pathlib
 pandas
+joblib
 sklearn
 pymongo
+starlette

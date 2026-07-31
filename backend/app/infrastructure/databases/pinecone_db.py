@@ -2,20 +2,21 @@ import logging
 
 from pinecone import AsyncPinecone, ServerlessSpec
 
-from app.config.settings import settings
-from app.schemas.llmresponse import LLMResponse
+from config.settings import settings
+from schemas.llmresponse import LLMResponse
 
 """
 Class for managing the pinecone database
 """
-class PineconeManager:
+class PineconeDB:
     """
     Constructor for the pinecone manager
     """
-    def __init__(self):
+    def __init__(self, index_name):
         self.pc = AsyncPinecone(api_key=settings.PINECONE_API)
-        self.index_name = settings.PINECONE_INDEX_NAME
+        self.index_name = index_name
         self.index_host: str | None = None
+        self.namespace = settings.PINECONE_NAMESPACE
         self.logger = logging.getLogger(__name__)
 
     """
@@ -48,7 +49,7 @@ class PineconeManager:
     """
     async function for upserting a job record
     """
-    async def upsert_job_record(self, record: LLMResponse) -> None:
+    async def upsert(self, record: dict) -> None:
         """Upsert job text and metadata using Pinecone's server-side embedding generation."""
 
         try:
@@ -58,8 +59,8 @@ class PineconeManager:
             index = self.pc.IndexAsyncio(host=self.index_host)
 
             await index.upsert_records(
-                records=[record.to_pinecone_record(text_field_name="chunk_text")],
-                namespace=settings.PINECONE_NAMESPACE
+                records=[record],
+                namespace=self.namespace,
             )
         except Exception as e:
             self.logger.error(f"Something has gone wrong with pinecone upsertion. {str(e)}")
@@ -68,7 +69,7 @@ class PineconeManager:
     """
     async function for searching a job record
     """
-    async def search_job_record(self, company, position, description, threshold=0.85):
+    async def search(self, search_text, response_fields, threshold=0.85, top_k=2):
         if not self.index_host:
             raise RuntimeError("PineconeManager must be initialized before searching data")
 
@@ -76,18 +77,18 @@ class PineconeManager:
             index = self.pc.IndexAsyncio(host=self.index_host)
 
             results = await index.search_records(
-                namespace=settings.PINECONE_NAMESPACE,
+                namespace=self.namespace,
                 query={
-                    "inputs": {"text": f"Company:{company}/ Position:{position}/ Description:{description[:1000]}"},
-                    "top_k": 2
+                    "inputs": {"text": search_text},
+                    "top_k": top_k,
                 },
-                fields=["ghost_job_risk", "response"]
+                fields=response_fields,
             )
 
             for item in results.result.hits:
                 score = getattr(item, "score", None) or item.get("_score", 0.0)
                 if score > threshold:
-                return True, item
+                    return True, item
 
             return False, None
 

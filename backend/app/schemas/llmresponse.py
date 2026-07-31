@@ -12,7 +12,7 @@ class LLMResponse(BaseModel):
     ghost_job_risk: float
     response: str
     created: datetime = Field(default_factory=datetime.utcnow)
-    job_description : str
+    description : str
 
     @property
     def record_id(self) -> str:
