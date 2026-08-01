@@ -133,8 +133,10 @@ async def train_model(version="1.0.0", target="ghost_job", dataset_type="heurist
     save_model(tree, version)
 
 if __name__ == "__main__":
-    version="v1"
+    version="v2"
     log_path = Path(__file__).resolve().parent.parent / "logs" / f"boosted_tree{version}.log"
     logging.basicConfig(level=logging.INFO, filename=log_path)
 
     asyncio.run(train_model(version=version))
+
+#mlflow command: mlflow server --host 127.0.0.1 --port 5000 --backend-store-uri sqlite:///mlflow.db

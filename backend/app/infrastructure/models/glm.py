@@ -44,8 +44,10 @@ class GLM:
             temperature=0.0,
         )
 
-        return JobEvaluationResult.model_validate_json(response.choices[0].message.content)
+        response_json = str(response.choices[0].message.content)
 
-    async def message(self, message : str):
-        result = await asyncio.to_thread(send_message, message)
+        return JobEvaluationResult.model_validate_json(response_json)
+
+    async def message(self, system_prompt : str, user_prompt : str):
+        result = await asyncio.to_thread(self.send_message, system_prompt, user_prompt)
         return result

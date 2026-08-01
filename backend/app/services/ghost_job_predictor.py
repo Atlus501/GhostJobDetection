@@ -18,7 +18,7 @@ class GhostJobPredictor:
     def predict(self, predictors : Predictors):
         df = pd.DataFrame([predictors.model_dump()]) 
 
-        prediction = self.model.predict(df)[0]
+        prediction = bool(self.model.predict(df)[0])
         probability = float(max(self.model.predict_proba(df)[0]))
 
         return prediction, probability

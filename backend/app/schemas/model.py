@@ -20,4 +20,3 @@ class Predictors(BaseModel):
     post_on_website : bool
     hiring_timeline : bool
     hiring_manager_listed : bool
-    created_date : datetime = datetime.now(timezone.utc)

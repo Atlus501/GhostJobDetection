@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from typing import Annotated
+import logging
 
 from services.ghost_job_predictor import GhostJobPredictor
 from services.llm_record_keeper import LLMRecordKeeper
@@ -25,6 +26,8 @@ async def test(
     llm_record_keeper: Annotated[LLMRecordKeeper, Depends(get_llm_record_keeper)],
     text_evaluator: Annotated[TextEvaluator, Depends(get_text_evaluator)],
 ):
+    logger = logging.getLogger(__name__)
+
     # 1. Search vector DB for existing evaluation record
     # Fixed typo: test_request.position
     found, record = await llm_record_keeper.search_record(
@@ -34,6 +37,7 @@ async def test(
     )
 
     score = record.score if found else None
+    reasoning = record.fields['response']
 
     # 2. If not found, run LLM evaluation
     if not found:
@@ -43,6 +47,7 @@ async def test(
 
         # Parse score safely
         score = response.final_rating
+        reasoning = response.reasoning
 
         # Construct LLM response payload
         llm_payload = test_request.model_dump()
@@ -66,5 +71,5 @@ async def test(
     return {
         "prediction": prediction,
         "probability": probability,
-        "evaluation_notes": record if found else record_text
+        "evaluation_notes": reasoning,
     }

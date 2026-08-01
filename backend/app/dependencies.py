@@ -16,4 +16,4 @@ def get_llm_record_keeper(request : Request) -> LLMRecordKeeper:
     return request.app.state.llm_record_keeper
 
 def get_text_evaluator(request : Request) -> TextEvaluator:
-    return requst.app.state.text_evaluator
+    return request.app.state.text_evaluator

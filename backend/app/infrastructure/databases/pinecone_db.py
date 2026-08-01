@@ -3,7 +3,6 @@ import logging
 from pinecone import AsyncPinecone, ServerlessSpec
 
 from config.settings import settings
-from schemas.llmresponse import LLMResponse
 
 """
 Class for managing the pinecone database

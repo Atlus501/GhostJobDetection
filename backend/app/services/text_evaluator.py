@@ -33,6 +33,7 @@ class TextEvaluator:
 
             ### OUTPUT FORMAT:
             You MUST respond with a valid JSON object matching this schema exactly. Do not include markdown formatting outside the JSON block.
+            Do not format your response with ANYTHING else. It must purely be a string that looks like a JSON object with the following structure:
 
             {
             "reasoning": "Brief step-by-step breakdown evaluating salary, responsibilities, company details, and requirements.",
@@ -51,5 +52,5 @@ class TextEvaluator:
             - Miscellaneous Benefits: {job.miscellaneous_benefits or 'Not Provided'}
             """
 
-        response = await llm.message(system_prompt, user_prompt)
+        response = await self.llm.message(system_prompt, user_prompt)
         return response

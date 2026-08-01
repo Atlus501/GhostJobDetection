@@ -31,6 +31,7 @@ def generate_synthetic_data(limit=500):
         "post_on_website",
         "hiring_timeline",
         "hiring_manager_listed",
+        "repost_frequency_year",
     ]
     data = [headers]
 
@@ -50,6 +51,7 @@ def generate_synthetic_data(limit=500):
         days_opened = generate_output(random.uniform(35, 100), random.uniform(0, 35), threshold)
         post_on_website = generate_output(False, True, threshold)
         hiring_timeline = generate_output(False, True, threshold)
+        repost_frequency_year = generate_output(random.randint(1, 2), random.randint(3, 20), threshold)
 
         threshold = 0.6 if ghost_job else 0.4
 
@@ -63,6 +65,7 @@ def generate_synthetic_data(limit=500):
             post_on_website,
             hiring_timeline,
             hiring_manager_listed,
+            repost_frequency_year,
         ]
 
         data.append(row)

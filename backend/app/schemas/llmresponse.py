@@ -24,5 +24,5 @@ class LLMResponse(BaseModel):
         """Convert Pydantic model into a valid Pinecone record with _id."""
         data = self.model_dump(mode="json")  # Serializes datetime to ISO-string
         data["_id"] = self.record_id
-        data[text_field_name] = f"Company:{self.company}/ Position:{self.position}/ Description:{self.job_description[:1000]}"
+        data[text_field_name] = f"Company:{self.company}/ Position:{self.position}/ Description:{self.description[:1000]}"
         return data

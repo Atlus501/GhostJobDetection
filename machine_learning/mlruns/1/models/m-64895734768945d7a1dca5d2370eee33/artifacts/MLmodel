@@ -1,0 +1,34 @@
+artifact_path: file:D:/GhostJobDetection/machine_learning/mlruns/1/models/m-64895734768945d7a1dca5d2370eee33/artifacts
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.13.7
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.9.0
+    skops_trusted_types: null
+is_signature_from_type_hint: false
+mlflow_version: 3.15.0
+model_id: m-64895734768945d7a1dca5d2370eee33
+model_size_bytes: 133468
+model_uuid: m-64895734768945d7a1dca5d2370eee33
+prompts: null
+run_id: 4afe96ecacf645738c6e351f21adc882
+signature:
+  inputs: '[{"type": "double", "name": "vagueness_score", "required": true}, {"type":
+    "boolean", "name": "salary_present", "required": true}, {"type": "double", "name":
+    "days_opened", "required": true}, {"type": "boolean", "name": "post_on_website",
+    "required": true}, {"type": "boolean", "name": "hiring_timeline", "required":
+    true}, {"type": "boolean", "name": "hiring_manager_listed", "required": true},
+    {"type": "long", "name": "repost_frequency_year", "required": true}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "bool", "shape": [-1]}}]'
+  params: null
+type_hint_from_example: false
+utc_time_created: '2026-08-01 05:29:24.735181'
