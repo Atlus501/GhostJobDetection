@@ -13,3 +13,4 @@ class TestRequest(BaseModel):
     post_on_website : bool
     hiring_timeline : bool 
     hiring_manager_listed : bool
+    repost_frequency_year : int | None

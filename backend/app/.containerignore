@@ -1,0 +1,47 @@
+venv/
+.venv/
+env/
+
+#python cache and compiled files
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+dist/
+build/
+*.egg
+
+#testing and coverage
+tests/
+test/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+#development tools and configs
+.flake8
+.mypy_cache/
+.pylintrc
+pyproject.toml
+setup.cfg
+Makefile
+
+#documentation and git
+*.md
+docs/
+.git/
+.gitignore
+.vscode/
+.idea/
+
+#environmental files
+.env
+.env.*
+
+#container configs
+Containerfile
+Dockerfile
+docker-compose*
+.containerignore
+.dockerignore

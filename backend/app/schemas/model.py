@@ -11,6 +11,7 @@ class DataEntry(BaseModel):
     post_on_website : bool
     hiring_timeline : bool
     hiring_manager_listed : bool
+    repost_frequency_year : int | None
     created_date : datetime = datetime.now(timezone.utc)
 
 class Predictors(BaseModel):
@@ -20,3 +21,4 @@ class Predictors(BaseModel):
     post_on_website : bool
     hiring_timeline : bool
     hiring_manager_listed : bool
+    repost_frequency_year : int | None

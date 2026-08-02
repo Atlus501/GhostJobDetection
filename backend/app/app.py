@@ -65,6 +65,8 @@ setup_error_handlers(app)
 app.include_router(report_router, prefix="/report")
 app.include_router(test_router, prefix="/test")
 
-if __name__ == "__main__":
-    logging.info("uvicorn server has begun listening")
-    uvicorn.run("app:app", host=settings.HOST, port=settings.PORT, reload=True)
+@app.get("/health", status_code=200)
+def health_check():
+    return {"status": "ok"}
+
+#command for starting the uvicorn server: uvicorn app:app --host 0.0.0.0 --port 8000

@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Literal
 
 current_dir = Path(__file__).resolve().parent
-env_path = current_dir.parent.parent /".env"
+env_path = current_dir.parent /".env"
 
 class Settings(BaseSettings):
   ZAI_API : str # Changed from ZAI_API_KEY to zai_api to match likely environment variable name
@@ -18,6 +18,8 @@ class Settings(BaseSettings):
   PORT : int
   ENVIRONMENT : Literal["testing", "development", "production"]
 
-  model_config = SettingsConfigDict(env_file=env_path, env_file_encoding="utf-8")
+  model_config = SettingsConfigDict(env_file=env_path, 
+                                    env_file_encoding="utf-8", 
+                                    extra="ignore")
 
 settings = Settings()

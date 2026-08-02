@@ -49,6 +49,7 @@ test_payload = TestRequest(
     post_on_website = True,
     hiring_timeline = False,
     hiring_manager_listed = False,
+    repost_frequency_year = 3,
 )
 
 #tests the endpoint for calculating the probability of an output

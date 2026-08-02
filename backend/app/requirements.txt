@@ -1,0 +1,14 @@
+zai-sdk
+pydantic
+pinecone
+fastapi[standard]
+uvicorn-worker
+uvicorn
+gunicorn
+mlflow
+pathlib
+pandas
+joblib
+scikit-learn
+pymongo
+starlette
