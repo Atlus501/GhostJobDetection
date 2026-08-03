@@ -42,5 +42,8 @@ To account for future data changes (because I know that this heuristics based da
 
 ### Component Analysis
 
-This project utilizes a variety of external services: pinecone, mongodb, GLM 4.7 flash, and mlflow.
-* pinecone -- a very robust vector database that is perfect for storing job searches for semantic matching. The idea is that pinecone will store the evaluations of the LLM so that 
+This project utilizes a variety of external services.
+* pinecone -- a very robust vector database that is perfect for storing job searches for semantic matching.
+* mongodb -- a good database to serve as my data lake/warehouse when retraining my GradientBoostedTree model.
+* glm 4.7 flash -- an open source LLM that is good enough at text analysis. Not to mention, very resource efficient (as the api is free).
+* mlflow -- mlops gold standard, used to monitor model metrics and versions. 
