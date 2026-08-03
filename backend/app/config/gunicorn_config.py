@@ -46,4 +46,4 @@ else:
     keepalive = 5
     loglevel = "info"
 
-#activate the gunicorn instance with the following command: gunicorn -c config/gunicorn_config.py app.app:app
+#activate the gunicorn instance with the following command: gunicorn -c ./config/gunicorn_config.py app:app
