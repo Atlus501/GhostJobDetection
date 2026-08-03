@@ -25,6 +25,9 @@ from services.text_evaluator import TextEvaluator
 async def lifespan(app: FastAPI):
     logging.basicConfig(level=logging.INFO, filename=settings.LOGGER_FILE)
 
+    print(settings)    
+    print('-' * 40)
+
     #sets up mongodbs
     ghost_job_db = MongoDB("GhostJobInfo")
     await ghost_job_db.setup_index(["company", "position"])

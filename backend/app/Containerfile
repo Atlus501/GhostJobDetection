@@ -3,36 +3,36 @@ FROM python:3.13-slim
 ARG BUILD_ENV=production
 ARG APP_VERSION=1.0.0
 
-ENV PYTHONDONTWRITEBYTECODE=1 \
+# 1. Set working directory to /app and give appuser ownership before switching users
+WORKDIR /app
+
+# 2. Environment variables (PYTHONPATH=/app ensures root modules like config resolve smoothly)
+ENV PYTHONPATH=/app \
+    PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     ENVIRONMENT=${BUILD_ENV} \
     APP_VERSION=${APP_VERSION} \
     MALLOC_ARENA_MAX=2 \
     PATH="/home/appuser/.local/bin:$PATH"
 
-WORKDIR /app
-
-# Step 4: Install system build dependencies (cleaned up in same layer to keep image small)
+# 3. System build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Step 5: Create a non-root user for security
-RUN useradd --create-home --shell /bin/bash appuser
+# 4. Copy requirements file into /app and install dependencies as appuser (Caching layer)
+COPY requirements.txt .
 
-# Step 6: Install dependencies as the non-root user (Leverages Docker layer caching)
-COPY --chown=appuser:appuser requirements.txt .
-USER appuser
-RUN pip install --no-cache-dir --user -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Step 7: Copy application source code
-COPY --chown=appuser:appuser . .
+# 5. Copy all application files directly into /app (Uses . . because WORKDIR is /app)
+COPY . .
 
 EXPOSE 8000
 
-# Step 8. Container Health Check
+# 6. Container Health Check (Make sure @app.get("/health") exists in FastAPI, or remove this block)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:8000/health || exit 1
 
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
