@@ -32,7 +32,13 @@ The final rating will be combined with the rest of the unused information from t
 
 To make the process more efficient, I will also use a vector database to store the results of the LLM evaluation. This way, the responses become way faster (from my testing, response times seem to jump from ~30-50 seconds to ~5-8 seconds). 
 
-### Dataset Issues
+### Dataset Issues and Solution
+
+Unfortunately, a massive problem that I encountered is that there was simply no dataset that suits my requirements. Some of the fields I wanted to use for my gradient boosted tree, like job repost frequency and how many days a position has been active, simply don't exist in the vast majority of ghost job databases. For datasets that have such metadata, the tuples aren't labelled as ghost job or not. So if I had to use these datasets, I basically need to manually test each job posting by myself, which is highly impractical. 
+
+To somewhat circumvent this issue, I used a python script to generate a dataset based on heuristics with a little bit of noise added. Some of these include how ghost job are more likely to be frequently reposted and ghost job postings are more likely to be active for more than 35 days. 
+
+To account for future data changes (because I know that this heuristics based dataset will be far from perfect), I designed a script that automatically syphons data from a data lake/warehouse, uses the data to train new versions of GradientBoostedTrees, and evaluate the new models. To facilitate model training and evaluations, data will be collected by mlflow to be stored and viewed. 
 
 ### Component Analysis
 
