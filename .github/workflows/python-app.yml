@@ -48,7 +48,7 @@ jobs:
         ENVIRONMENT: ${{ secrets.ENVIRONMENT}}
       run: |
         #1. Start Gunicorn in the process and save process id
-        cd /backend/app
+        cd $GITHUB_WORKSPACE/backend/app
         gunicorn -c ./config/gunicorn_config.py app:app &
         GUNICORN_PID=$!
 
@@ -56,7 +56,7 @@ jobs:
         sleep 6
 
         #3. run request-based endpoint tests
-        cd /backend/tests
+        cd $GITHUB_WORKSPACE/backend/tests
         python -m endpoint
         TEST_EXIT_CODE=$?
 
