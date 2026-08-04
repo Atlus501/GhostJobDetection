@@ -39,6 +39,7 @@ jobs:
         ZAI_API: ${{ secrets.ZAI_API }}
         GLM_MODEL: ${{ secrets.GLM_MODEL}}
         PINECONE_API: ${{ secrets.PINECONE_API}}
+        PINECONE_INDEX_NAME: ${{ secrets.PINECONE_INDEX_NAME}}
         PINECONE_NAMESPACE: ${{ secrets.PINECONE_NAMESPACE}}
         LOGGER_FILE: ${{ secrets.LOGGER_FILE}}
         MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
