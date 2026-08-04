@@ -6,8 +6,12 @@ name: Python application
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for running tests'
+        required: false
+        default: 'Manual test trigger'
 
 permissions:
   contents: read
