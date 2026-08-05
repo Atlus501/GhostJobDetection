@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: 
+      dockerfile: Containerfile
+      context: .
+    ports: 
+      - "8000:8000"
+    environment:
+      - ZAI_API
+      - GLM_MODEL
+      - PINECONE_API
+      - PINECONE_INDEX_NAME
+      - PINECONE_NAMESPACE
+      - LOGGER_FILE
+      - MONGODB_USERNAME
+      - MONGODB_PASSWORD
+      - HOST
+      - PORT
+      - ENVIRONMENT
+    develop:
+      watch:
+        - action: sync+restart
+          path: .
+          target: /app
+        - action: rebuild
+          path: requirements.txt
