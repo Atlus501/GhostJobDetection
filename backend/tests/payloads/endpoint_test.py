@@ -1,4 +1,3 @@
-import requests
 from schemas.requests import TestRequest
 
 test_payload = TestRequest(
@@ -51,8 +50,3 @@ test_payload = TestRequest(
     hiring_manager_listed = False,
     repost_frequency_year = 3,
 )
-
-#tests the endpoint for calculating the probability of an output
-x = requests.post(url='http://127.0.0.1:8000/test', json=test_payload.model_dump())
-
-print(x.json())
