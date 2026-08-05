@@ -109,9 +109,13 @@ jobs:
 
     - name: Download active task definition from AWS
       run: |
+        # 1. Save raw response from AWS to a temporary file
         aws ecs describe-task-definition \
           --task-definition ${{ vars.ECS_TASK_DEFINITION }} \
-          --query taskDefinition > task-definition.json
+          --query taskDefinition > task-def-raw.json
+
+        # 2. Strip metadata keys and output to task-definition.json
+        jq 'del(.taskDefinitionArn, .revision, .status, .requiresAttributes, .compatibilities, .registeredAt, .registeredBy, .enableFaultInjection)' task-def-raw.json > task-definition.json
 
     - name: Fill in the new image ID in the Amazon ECS task definition
       id: task-def
@@ -128,5 +132,3 @@ jobs:
         service: ${{ vars.ECS_SERVICE }}
         cluster: ${{ vars.ECS_CLUSTER }}
         wait-for-service-stability: true
-
-        
