@@ -36,6 +36,8 @@ jobs:
         
     - name: running integration test
       env:
+        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         ZAI_API: ${{ secrets.ZAI_API }}
         GLM_MODEL: ${{ secrets.GLM_MODEL}}
         PINECONE_API: ${{ secrets.PINECONE_API}}
