@@ -27,6 +27,7 @@ htmlcov/
 pyproject.toml
 setup.cfg
 Makefile
+*.joblib
 
 #documentation and git
 *.md
