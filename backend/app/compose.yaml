@@ -6,6 +6,8 @@ services:
     ports: 
       - "8000:8000"
     environment:
+      - AWS_ACCESS_KEY
+      - AWS_SECRET_ACCESS_KEY
       - ZAI_API
       - GLM_MODEL
       - PINECONE_API
