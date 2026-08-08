@@ -1,7 +1,7 @@
 from payloads.endpoint_test import test_payload
 from test_types.endpoint import endpoint_test
 
-url = 'http://54.160.80.48:8000/test'
+url = 'https://helloworld-portfolio-projects.click/test'
 
 #tests the endpoint for calculating the probability of an output
 result = endpoint_test(url=f'{url}', payload=test_payload)

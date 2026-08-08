@@ -71,6 +71,9 @@ instance/
 # Sphinx documentation
 docs/_build/
 
+#terraform files
+*.tfvars
+
 # PyBuilder
 .pybuilder/
 target/
@@ -149,6 +152,7 @@ activemq-data/
 
 # Environments
 .env
+*.env
 .envrc
 .venv
 env/
