@@ -1,8 +1,8 @@
 resource "aws_secretsmanager_secret" "secrets" {
-  name = "ghost_job_detector/secrets"
+  name = "${var.name}/secrets"
   description = "secrets used for ghost job detector"
   tags = {
-    personal_projects = "ghost_job_detector"
+    personal_projects = var.name
   }
 }
 

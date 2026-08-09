@@ -73,6 +73,10 @@ docs/_build/
 
 #terraform files
 *.tfvars
+LICENSE*
+terraform-provider*
+.terraform.lock.hcl*
+modules.json
 
 # PyBuilder
 .pybuilder/

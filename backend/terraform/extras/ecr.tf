@@ -1,4 +1,4 @@
-resource "aws_ecr_repository" "backend_repository" {
+resource "aws_ecr_repository" "ecr" {
   name                 = "ghost-job-detector-backend"
   image_tag_mutability = "MUTABLE"
   force_delete = true
