@@ -28,7 +28,7 @@ _settings = GunicornSettings()
 # ------------------------------------------------------------------
 # Global Gunicorn Variables (Gunicorn automatically reads these!)
 # ------------------------------------------------------------------
-bind = "0.0.0.0:80"
+bind = "0.0.0.0:8000"
 worker_class = "uvicorn.workers.UvicornWorker"
 workers = _settings.workers
 worker_connections = _settings.worker_connections

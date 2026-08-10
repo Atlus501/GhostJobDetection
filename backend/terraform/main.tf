@@ -11,7 +11,7 @@ module secrets {
     source = "./modules/secrets"
 
     secrets = var.secrets
-    name = "ghost_job_detector"
+    name = "testing"
 }
 
 module lb {
@@ -20,7 +20,7 @@ module lb {
     https = true
     lb_name = "default-lb"
     target_group_name = "application"
-    target_group_port = 80
+    target_group_port = 8000
 }
 
 module ecs {

@@ -66,7 +66,7 @@ variable container_name {
 variable container_port {
     type = number 
     description = "the container port number"
-    default = 80
+    default = 8000
 }
 
 variable service_name {
