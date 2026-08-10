@@ -1,7 +1,3 @@
-data "aws_vpc" "default" {
-  default = true
-}
-
 # Fetch public subnets in default VPC
 data "aws_subnets" "public" {
   filter {
@@ -14,8 +10,23 @@ data "aws_subnets" "public" {
   }
 }
 
-resource "aws_ecs_cluster" "ghost_job_detector_cluster" {
-  name = "ghost_job_detector"
+#1. create the ecr that stores the image
+resource "aws_ecr_repository" "ecr" {
+  name                 = var.ecr_name
+  image_tag_mutability = "MUTABLE"
+  force_delete = var.ecr_force_delete
+  encryption_configuration {
+    encryption_type = "AES256"
+  }
+
+  image_scanning_configuration {
+    scan_on_push = true
+  }
+}
+
+#2. create the cluster that serves the services
+resource "aws_ecs_cluster" "cluster" {
+  name = var.cluster_name
 
   setting {
     name  = "containerInsights"
@@ -24,10 +35,10 @@ resource "aws_ecs_cluster" "ghost_job_detector_cluster" {
 }
 
 resource "aws_ecs_task_definition" "main_task" {
-  family                   = "ghost_job_detection"
+  family                   = var.task_name
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "1024"
-  memory                   = "3072"
+  cpu                      = var.cpu
+  memory                   = var.memory
   network_mode             = "awsvpc"
 
   execution_role_arn = aws_iam_role.ecs_task_execution_role.arn
@@ -40,14 +51,14 @@ resource "aws_ecs_task_definition" "main_task" {
 
   container_definitions = jsonencode([
     {
-      name      = "Main"
-      image     = "893410593768.dkr.ecr.us-east-1.amazonaws.com/personal_project/ghost_job_detector@sha256:43c01f257b5c3bf871b38dbd3f9c811591b06b8650378744e53a854e6dba3b71"
+      name      = var.container_name
+      image     = "${aws_ecr_repository.ecr.repository_url}:latest"
       essential = true
 
       portMappings = [
         {
-          containerPort = 80
-          hostPort      = 80
+          containerPort = var.container_port
+          hostPort      = var.container_port
           protocol      = "tcp"
           appProtocol   = "http"
         }
@@ -66,14 +77,14 @@ resource "aws_ecs_task_definition" "main_task" {
       secrets = [
         {
           name      = "APP_SECRETS"
-          valueFrom = aws_secretsmanager_secret.secrets.arn
+          valueFrom = var.secrets_arn
         }
       ]
 
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = "/ecs/ghost_job_detection"
+          "awslogs-group"         = "/ecs/${var.task_name}"
           "awslogs-create-group"  = "true"
           "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
@@ -82,7 +93,7 @@ resource "aws_ecs_task_definition" "main_task" {
 
       # Fixed Health Check (Curling HTTP port 80 locally inside container)
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:80/health || exit 1"]
+        command     = ["CMD-SHELL", "curl -f ${var.health_check_path} || exit 1"]
         interval    = 30
         timeout     = 5
         retries     = 3
@@ -92,11 +103,11 @@ resource "aws_ecs_task_definition" "main_task" {
   ])
 }
 
-resource "aws_ecs_service" "ghost_job_detection_service" {
-    name = "ghost_job_detector"
-    cluster = aws_ecs_cluster.ghost_job_detector_cluster.id
+resource "aws_ecs_service" "service" {
+    name = var.service_name
+    cluster = aws_ecs_cluster.cluster.id
     task_definition=aws_ecs_task_definition.main_task.arn
-    desired_count = 1
+    desired_count = var.service_desired_count
     availability_zone_rebalancing = "ENABLED"
     scheduling_strategy = "REPLICA"
 
@@ -107,16 +118,14 @@ resource "aws_ecs_service" "ghost_job_detection_service" {
     }
 
     load_balancer {
-        target_group_arn = aws_lb_target_group.ghost_job_detector.arn
-        container_name   = "Main"
-        container_port   = 80
+        target_group_arn = var.lb_arn
+        container_name   = var.container_name
+        container_port   = var.container_port
     }
 
     network_configuration {
-        subnets          = data.aws_subnets.default.ids
+        subnets          = data.aws_subnets.public.ids
         security_groups  = [aws_security_group.application_sg.id]
         assign_public_ip = false
     }
-
-    depends_on = [aws_lb_listener.ghost_job_detector]
 }

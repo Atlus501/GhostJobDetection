@@ -1,9 +1,10 @@
+
 # -----------------------------------------------------------------------------
 # 1. ECS TASK ROLE (Used by your FastAPI application at runtime)
 # -----------------------------------------------------------------------------
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "task_role"
+  name = "${var.task_name}_task_role"
 
   # Trust policy allowing ECS tasks to assume this role
   assume_role_policy = jsonencode({
@@ -20,8 +21,10 @@ resource "aws_iam_role" "ecs_task_role" {
 
 # Attach S3 read permissions to the Task Role
 resource "aws_iam_role_policy" "task_role_s3_policy" {
+  count = var.allow_s3 ? 1 : 0
+
   name = "task_role_s3_policy"
-  role = aws_iam_role.ecs_task_role.id
+  role = var.s3_id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -34,8 +37,8 @@ resource "aws_iam_role_policy" "task_role_s3_policy" {
         ]
         # Bucket ARN + object wildcard ARN
         Resource = [
-          aws_s3_bucket.tree_bucket.arn,
-          "${aws_s3_bucket.tree_bucket.arn}/*"
+          var.s3_arn,
+          "${var.s3_arn}/*"
         ]
       }
     ]
@@ -47,7 +50,7 @@ resource "aws_iam_role_policy" "task_role_s3_policy" {
 # -----------------------------------------------------------------------------
 
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "task_execution_role"
+  name = "${var.task_name}_execution_role"
 
   # Trust policy allowing ECS to assume this role
   assume_role_policy = jsonencode({
@@ -70,6 +73,7 @@ resource "aws_iam_role_policy_attachment" "ecs_execution_standard" {
 
 # Custom policy allowing the ECS agent to retrieve values from Secrets Manager
 resource "aws_iam_role_policy" "ecs_execution_secrets" {
+  count = var.allow_secrets ? 1 : 0
   name = "ecs_execution_secrets_policy"
   role = aws_iam_role.ecs_task_execution_role.id
 
@@ -82,7 +86,7 @@ resource "aws_iam_role_policy" "ecs_execution_secrets" {
           "secretsmanager:GetSecretValue"
         ]
         Resource = [
-          aws_secretsmanager_secret.secrets.arn
+          var.secrets_arn
         ]
       }
     ]
