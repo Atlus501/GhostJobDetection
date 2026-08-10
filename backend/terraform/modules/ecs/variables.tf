@@ -42,9 +42,14 @@ variable secrets_arn {
     description = "the arn of the aws secrets manager used"
 }
 
-variable lb_arn{
+variable lb_listener_arn{
     type = string
     description = "the arn of the load balancer used"
+}
+
+variable lb_target_group_arn {
+    type = string
+    description = "arn of the lb target group"
 }
 
 variable lb_sg_id {
@@ -59,9 +64,9 @@ variable container_name {
 }
 
 variable container_port {
-    type = string 
+    type = number 
     description = "the container port number"
-    default = "80"
+    default = 80
 }
 
 variable service_name {

@@ -118,7 +118,7 @@ resource "aws_ecs_service" "service" {
     }
 
     load_balancer {
-        target_group_arn = var.lb_arn
+        target_group_arn = var.lb_target_group_arn
         container_name   = var.container_name
         container_port   = var.container_port
     }
@@ -126,6 +126,8 @@ resource "aws_ecs_service" "service" {
     network_configuration {
         subnets          = data.aws_subnets.public.ids
         security_groups  = [aws_security_group.application_sg.id]
-        assign_public_ip = false
+        assign_public_ip = true
     }
+
+    depends_on = [var.lb_listener_arn]
 }

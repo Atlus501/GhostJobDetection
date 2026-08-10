@@ -24,7 +24,7 @@ resource "aws_iam_role_policy" "task_role_s3_policy" {
   count = var.allow_s3 ? 1 : 0
 
   name = "task_role_s3_policy"
-  role = var.s3_id
+  role = aws_iam_role.ecs_task_role.id
 
   policy = jsonencode({
     Version = "2012-10-17"

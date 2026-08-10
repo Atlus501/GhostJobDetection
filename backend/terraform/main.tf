@@ -3,7 +3,7 @@ module "s3" {
     source = "./modules/s3"
 
     environment = "production"
-    name = "tree_bucket"
+    name = "boosted-tree-bucket"
     force_destroy = true
 }
 
@@ -30,10 +30,13 @@ module ecs {
     cluster_name = "ghost_job_detector_cluster"
     task_name = "ghost_job_detector_main_task"
     secrets_arn = module.secrets.arn
-    lb_arn = module.lb.lb_arn
+    
     service_name = "ghost_job_detecotr_service"
     s3_id = module.s3.bucket_id
     s3_arn = module.s3.bucket_arn
     application_security_group_name = "ghost_job_detector_security_group"
+
+    lb_listener_arn = module.lb.listener_arn
     lb_sg_id = module.lb.lb_sg_id
+    lb_target_group_arn = module.lb.target_group_arn
 }
