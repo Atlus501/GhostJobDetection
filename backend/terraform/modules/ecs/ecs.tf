@@ -71,7 +71,8 @@ resource "aws_ecs_task_definition" "main_task" {
         { name = "HOST", value = "0.0.0.0" },
         { name = "PORT", value = "8000" },
         { name = "LOGGER_FILE", value = "ghostdetection.log" },
-        { name = "ENVIRONMENT", value = "production" }
+        { name = "ENVIRONMENT", value = "production" },
+        { name = "S3_BUCKET", value = "boosted-tree-joblib-893410593768-us-east-1-an" }
       ]
 
       secrets = [

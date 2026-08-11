@@ -1,4 +1,5 @@
 resource "aws_secretsmanager_secret" "secrets" {
+
   name = "${var.name}/secrets"
   description = "secrets used for ghost job detector"
   tags = {
@@ -7,6 +8,7 @@ resource "aws_secretsmanager_secret" "secrets" {
 }
 
 resource "aws_secretsmanager_secret_version" "secrets_val" {
+
   secret_id     = aws_secretsmanager_secret.secrets.id
   secret_string = jsonencode(var.secrets)
 }
