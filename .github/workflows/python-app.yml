@@ -49,6 +49,7 @@ jobs:
         HOST: ${{ secrets.HOST}}
         PORT: ${{ secrets.PORT}}
         ENVIRONMENT: ${{ secrets.ENVIRONMENT}}
+        S3_BUCKET: ${{ vars.S3_BUCKET }}
       run: |
         #1. Start Gunicorn in the process and save process id
         cd $GITHUB_WORKSPACE/backend/app
