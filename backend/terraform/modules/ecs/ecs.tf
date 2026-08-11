@@ -69,23 +69,42 @@ resource "aws_ecs_task_definition" "main_task" {
         { name = "PINECONE_INDEX_NAME", value = "ghostjobs" },
         { name = "PINECONE_NAMESPACE", value = "jobs" },
         { name = "HOST", value = "0.0.0.0" },
-        { name = "PORT", value = "80" },
+        { name = "PORT", value = "8000" },
         { name = "LOGGER_FILE", value = "ghostdetection.log" },
         { name = "ENVIRONMENT", value = "production" }
       ]
 
       secrets = [
         {
-          name      = "APP_SECRETS"
-          valueFrom = var.secrets_arn
+          name      = "AWS_ACCESS_KEY"
+          valueFrom = "${var.secrets_arn}:AWS_ACCESS_KEY::"
+        },
+        {
+          name      = "AWS_SECRET_ACCESS_KEY"
+          valueFrom = "${var.secrets_arn}:AWS_SECRET_ACCESS_KEY::"
+        },
+        {
+          name      = "ZAI_API"
+          valueFrom = "${var.secrets_arn}:ZAI_API::"
+        },
+        {
+          name = "PINECONE_API"
+          valueFrom = "${var.secrets_arn}:PINECONE_API::"
+        },
+        {
+          name = "MONGODB_USERNAME"
+          valueFrom = "${var.secrets_arn}:MONGODB_USERNAME::"
+        },
+        {
+          name = "MONGODB_PASSWORD"
+          valueFrom = "${var.secrets_arn}:MONGODB_PASSWORD::"
         }
       ]
 
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          "awslogs-group"         = "/ecs/${var.task_name}"
-          "awslogs-create-group"  = "true"
+          "awslogs-group"         = aws_cloudwatch_log_group.cw_log_group.name
           "awslogs-region"        = "us-east-1"
           "awslogs-stream-prefix" = "ecs"
         }
@@ -101,6 +120,8 @@ resource "aws_ecs_task_definition" "main_task" {
       }
     }
   ])
+
+  depends_on = [aws_cloudwatch_log_group.cw_log_group]
 }
 
 resource "aws_ecs_service" "service" {

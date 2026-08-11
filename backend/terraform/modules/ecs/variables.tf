@@ -112,3 +112,9 @@ variable allow_secrets {
     description = "whether the task can access aws secrets"
     default = true
 }
+
+variable cw_log_retention {
+    type = number
+    description = "number of days that a log is active in cloudwatch"
+    default = 1
+}

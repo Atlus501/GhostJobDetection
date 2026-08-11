@@ -19,6 +19,7 @@ class Settings(BaseSettings):
     HOST : str 
     PORT : int 
     ENVIRONMENT : Literal["testing", "development", "production"] 
+    S3_BUCKET : str
 
     @field_validator("*", mode="before")
     @classmethod

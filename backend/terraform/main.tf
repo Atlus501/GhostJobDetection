@@ -11,7 +11,7 @@ module secrets {
     source = "./modules/secrets"
 
     secrets = var.secrets
-    name = "testing"
+    name = "ghost_job_secrets"
 }
 
 module lb {

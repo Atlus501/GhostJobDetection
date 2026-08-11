@@ -14,7 +14,7 @@ class BoostedTree:
                             aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
         )
         s3.download_file(
-            "boosted-tree-joblib-893410593768-us-east-1-an",
+            settings.S3_BUCKET,
             "boosted_tree.joblib",
             path
         )
