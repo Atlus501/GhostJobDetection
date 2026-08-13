@@ -40,3 +40,5 @@ module ecs {
     lb_sg_id = module.lb.lb_sg_id
     lb_target_group_arn = module.lb.target_group_arn
 }
+
+#terraform destroy -target="module.ecs" -target="module.vpc" -target="module.lb"

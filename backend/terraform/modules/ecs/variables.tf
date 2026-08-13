@@ -34,7 +34,7 @@ variable memory {
 variable health_check_path {
     type = string
     description = "the path used for health checks"
-    default = "http://localhost:80/health"
+    default = "http://localhost:8000/health"
 }
 
 variable secrets_arn {

@@ -4,6 +4,8 @@ from pinecone import AsyncPinecone, ServerlessSpec
 
 from config.settings import settings
 
+from monitoring.decorators import track_dependency
+
 """
 Class for managing the pinecone database
 """
@@ -48,6 +50,7 @@ class PineconeDB:
     """
     async function for upserting a job record
     """
+    @track_dependency('pinecone')
     async def upsert(self, record: dict) -> None:
         """Upsert job text and metadata using Pinecone's server-side embedding generation."""
 
@@ -68,6 +71,7 @@ class PineconeDB:
     """
     async function for searching a job record
     """
+    @track_dependency('pinecone')
     async def search(self, search_text, response_fields, threshold=0.85, top_k=2):
         if not self.index_host:
             raise RuntimeError("PineconeManager must be initialized before searching data")

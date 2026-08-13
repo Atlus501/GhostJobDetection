@@ -7,9 +7,8 @@ url = 'http://localhost:8000/health'
 
 requests.get(url)
 
-url = 'http://localhost:8000/test'
+url = 'http://localhost:8000/test/'
 
 #tests the endpoint for calculating the probability of an output
 result = endpoint_test(url=f'{url}', payload=test_payload)
-
 print(result)

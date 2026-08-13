@@ -2,6 +2,11 @@ resource "aws_secretsmanager_secret" "secrets" {
 
   name = "${var.name}/secrets"
   description = "secrets used for ghost job detector"
+
+  lifecycle {
+    prevent_destroy = true
+  }
+
   tags = {
     personal_projects = var.name
   }

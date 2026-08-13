@@ -43,6 +43,7 @@ async def test(
     if not found:
         # Convert TestRequest -> Job schema (extra fields dropped automatically)
         job = Job(**test_request.model_dump())
+
         response = await text_evaluator.rate_job(job)
 
         # Parse score safely

@@ -1,7 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from contextlib import asynccontextmanager
 import logging
-import uvicorn
 
 from config.settings import settings
 
@@ -12,6 +11,9 @@ from infrastructure.databases.mongodb import MongoDB
 from infrastructure.databases.pinecone_db import PineconeDB
 from infrastructure.models.boosted_tree import BoostedTree
 from infrastructure.models.glm import GLM
+
+from monitoring.setup import setup_monitoring
+from prometheus_client import CONTENT_TYPE_LATEST, generate_latest, REGISTRY
 
 from routers.report import router as report_router
 from routers.test import router as test_router
@@ -62,12 +64,29 @@ setup_middlewares(app)
 #sets up error handling
 setup_error_handlers(app)
 
+#adds the routers for the app
 app.include_router(report_router, prefix="/report")
 app.include_router(test_router, prefix="/test")
 
+#sets up monitoring
+setup_monitoring()
+
+#default endpoint
+@app.get("/", status_code=200)
+def default():
+    return {"status": "ok"}
+
+#endpoint for health checks
 @app.get("/health", status_code=200)
 def health_check():
     return {"status": "ok"}
+
+@app.get("/metrics", status_code=200)
+def get_metrics():
+    return Response(
+        content=generate_latest(REGISTRY), 
+        media_type=CONTENT_TYPE_LATEST
+    )
 
 #command for starting the uvicorn server: uvicorn app:app --host 0.0.0.0 --port 8000
 

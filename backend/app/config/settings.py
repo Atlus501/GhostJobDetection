@@ -2,8 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 from pathlib import Path
 from typing import Literal
+import os
 
-#env_path = Path(__file__).resolve().parent.parent.parent / ".env"
+env_path = Path(__file__).resolve().parent.parent.parent / ".env"
 
 class Settings(BaseSettings):
     AWS_ACCESS_KEY: str
@@ -28,7 +29,10 @@ class Settings(BaseSettings):
             return v.strip("\r\n ")
         return v
 
-    #model_config = SettingsConfigDict(env_file=env_path, extra="ignore")
-    model_config = SettingsConfigDict(extra="ignore")
+    model_config = SettingsConfigDict(env_file=env_path, extra="ignore")
+    #model_config = SettingsConfigDict(extra="ignore")
 
 settings = Settings()
+
+if settings.ENVIRONMENT == "production":
+    os.environ['ENABLE_METRICS'] = "true"

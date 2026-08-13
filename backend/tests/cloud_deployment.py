@@ -11,11 +11,9 @@ try:
     results.append(x.json())
     print(x)
 
-    # url = 'https://helloworld-portfolio-projects.click/test'
-    # x = endpoint_test(url=f'{url}', payload=test_payload)
-    # results.append(x)
+    url = 'https://helloworld-portfolio-projects.click/test/'
+    x = endpoint_test(url=f'{url}', payload=test_payload)
+    print(x)
     
 except Exception as e:
     print(e)
-
-print(results)

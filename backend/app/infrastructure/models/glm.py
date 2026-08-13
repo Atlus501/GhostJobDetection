@@ -5,6 +5,8 @@ from pydantic import BaseModel, Field
 
 from config.settings import settings
 
+from monitoring.decorators import track_dependency
+
 class JobEvaluationResult(BaseModel):
     reasoning: str
     risk_factors: list[str]
@@ -24,6 +26,7 @@ class GLM:
     """
     Function for sending messages
     """
+    @track_dependency("glm")
     def send_message(self, system_prompt : str, user_prompt : str):
         response = self.client.chat.completions.create(
             model=self.model_name,

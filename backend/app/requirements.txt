@@ -12,3 +12,5 @@ scikit-learn
 pymongo
 starlette
 boto3
+prometheus-client
+psutil
