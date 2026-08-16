@@ -8,12 +8,10 @@ results = []
 try:
     #tests the endpoint for calculating the probability of an output
     x = requests.get(url=f'{url}')
-    results.append(x.json())
     print(x)
 
-    url = 'https://helloworld-portfolio-projects.click/test/'
+    url = 'https://helloworld-portfolio-projects.click/test'
     x = endpoint_test(url=f'{url}', payload=test_payload)
-    print(x)
     
 except Exception as e:
     print(e)
