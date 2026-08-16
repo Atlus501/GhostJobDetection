@@ -32,6 +32,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
+        cd $GITHUB_WORKSPACE/backend/app
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
     - name: running integration test
@@ -53,7 +54,9 @@ jobs:
       run: |
         #1. Start Gunicorn in the process and save process id
         cd $GITHUB_WORKSPACE/backend/app
-        gunicorn -c ./config/gunicorn_config.py app:app &
+        uvicorn "app:app" --host 0.0.0.0 --port 8000 &
+        
+        #gunicorn -c ./config/gunicorn_config.py app:app &
         GUNICORN_PID=$!
 
         #2. wait a few seconds for server to finish booting
