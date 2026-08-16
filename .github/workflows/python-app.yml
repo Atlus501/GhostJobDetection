@@ -32,6 +32,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install flake8 pytest
+        cd $GITHUB_WORKSPACE/backend/app
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
         
     - name: running integration test
