@@ -24,7 +24,7 @@ DEPENDENCY_ERRORS = Counter('dependency_errors',
                         namespace='ghost_job_detector'
                         )
 
-DEPENDENCY_LATENCY = Histogram('glm_latency',
-                        'the amount of latency that glm takes when answering questions',
+DEPENDENCY_LATENCY = Histogram('dependency_latency',
+                        'the amount of latency that dependencies take when doing operations',
                         labelnames=['service', 'operation', 'status'],
                         namespace='ghost_job_detector')
