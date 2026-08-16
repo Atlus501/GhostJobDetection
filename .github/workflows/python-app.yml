@@ -54,7 +54,9 @@ jobs:
       run: |
         #1. Start Gunicorn in the process and save process id
         cd $GITHUB_WORKSPACE/backend/app
-        gunicorn -c ./config/gunicorn_config.py app:app &
+        uvicorn "app:app" --host 0.0.0.0 --port 8000
+        
+        #gunicorn -c ./config/gunicorn_config.py app:app &
         GUNICORN_PID=$!
 
         #2. wait a few seconds for server to finish booting
