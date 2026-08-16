@@ -1,5 +1,6 @@
 import psutil
 from prometheus_client import REGISTRY, Metric
+import platform
 
 class WindowsProcessCollector:
     def collect(self):
@@ -37,4 +38,8 @@ class WindowsProcessCollector:
 
 # Register it ONCE on app startup
 def setup_monitoring():
-    REGISTRY.register(WindowsProcessCollector())
+    if platform.system().lower() == "windows":
+        try:
+            REGISTRY.register(WindowsProcessCollector())
+        except:
+            pass
